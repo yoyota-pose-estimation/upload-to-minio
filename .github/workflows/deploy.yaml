@@ -20,4 +20,4 @@ jobs:
           --set image.repository=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
           --set image.tag=${{ github.sha }}
           --history-max 2
-          express-starter ./helm
+          upload-to-minio ./helm
