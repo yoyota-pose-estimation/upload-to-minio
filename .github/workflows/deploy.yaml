@@ -1,0 +1,23 @@
+name: kubernetes deploy
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: image
+
+jobs:
+  deploy:
+    container: alpine/helm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir -p ~/.kube
+      - run: echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+      - run: helm upgrade --install --namespace yoyota
+          --set image.repository=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          --set image.tag=${{ github.sha }}
+          --history-max 2
+          express-starter ./helm

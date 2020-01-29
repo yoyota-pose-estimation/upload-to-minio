@@ -1,0 +1,31 @@
+{
+  "name": "back-end",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "lint": "eslint --fix ./src",
+    "start": "node src/index.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "helmet": "^3.21.2"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-config-prettier": "^2.10.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-jest": "^21.27.2",
+    "eslint-plugin-prettier": "^2.7.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "jest": "^25.1.0",
+    "jest-cli": "^24.9.0",
+    "nodemon": "^1.19.4",
+    "prettier": "^1.19.1",
+    "supertest": "^3.4.2"
+  }
+}
