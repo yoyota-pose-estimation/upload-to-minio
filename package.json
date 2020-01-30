@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "scripts": {
     "dev": "nodemon src/index.js",
-    "lint": "eslint --fix ./src",
+    "lint": "eslint ./src",
     "start": "node src/index.js",
     "test": "jest"
   },
