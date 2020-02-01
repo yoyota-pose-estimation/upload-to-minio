@@ -16,8 +16,15 @@ jobs:
       - uses: actions/checkout@v2
       - run: mkdir -p ~/.kube
       - run: echo "${{ secrets.KUBE_CONFIG }}" > ~/.kube/config
+      - name: get image repository
+        id: image-repository
+        run: |
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          IMAGE_ID=docker.pkg.github.com/${{ github.repository }}/$VERSION
+          echo "::set-output name=repository::$IMAGE_ID"
       - run: helm upgrade --install --namespace yoyota
-          --set image.repository=docker.pkg.github.com/${{ github.repository }}/$IMAGE_NAME
+          --set image.repository=${{ steps.image-repository.outputs.repository }}
           --set image.tag=${{ github.sha }}
           --history-max 2
-          upload-to-minio ./helm
+          express-starter ./helm
