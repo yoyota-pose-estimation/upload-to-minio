@@ -17,6 +17,7 @@ jobs:
         with:
           node-version: 12.x
       - run: npm ci
+      - run: sleep 10 # see https://github.com/yoyota-pose-estimation/upload-to-minio/issues/4
       - run: npm run test
     services:
       minio:
