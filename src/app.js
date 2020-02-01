@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(compression())
 app.use(helmet())
 
-app.get("/health", (_, res) => {
+app.get("/healthz", (_, res) => {
   res.status(204).send()
 })
 
