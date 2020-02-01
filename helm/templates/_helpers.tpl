@@ -2,7 +2,7 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "express-starter.name" -}}
+{{- define "upload-to-minio.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -11,7 +11,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "express-starter.fullname" -}}
+{{- define "upload-to-minio.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -27,16 +27,16 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "express-starter.chart" -}}
+{{- define "upload-to-minio.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Common labels
 */}}
-{{- define "express-starter.labels" -}}
-helm.sh/chart: {{ include "express-starter.chart" . }}
-{{ include "express-starter.selectorLabels" . }}
+{{- define "upload-to-minio.labels" -}}
+helm.sh/chart: {{ include "upload-to-minio.chart" . }}
+{{ include "upload-to-minio.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -46,17 +46,17 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "express-starter.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "express-starter.name" . }}
+{{- define "upload-to-minio.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "upload-to-minio.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "express-starter.serviceAccountName" -}}
+{{- define "upload-to-minio.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (include "express-starter.fullname" .) .Values.serviceAccount.name }}
+    {{ default (include "upload-to-minio.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}

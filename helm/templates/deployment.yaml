@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "express-starter.fullname" . }}
+  name: {{ include "upload-to-minio.fullname" . }}
   labels:
-    {{- include "express-starter.labels" . | nindent 4 }}
+    {{- include "upload-to-minio.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "express-starter.selectorLabels" . | nindent 6 }}
+      {{- include "upload-to-minio.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "express-starter.selectorLabels" . | nindent 8 }}
+        {{- include "upload-to-minio.selectorLabels" . | nindent 8 }}
     spec:
     {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
     {{- end }}
-      serviceAccountName: {{ include "express-starter.serviceAccountName" . }}
+      serviceAccountName: {{ include "upload-to-minio.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:

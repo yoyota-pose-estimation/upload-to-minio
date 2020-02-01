@@ -3,6 +3,11 @@ on:
   - push
   - pull_request
 
+env:
+  S3_ENDPOINT: 0.0.0.0:9000
+  AWS_ACCESS_KEY_ID: accessKey
+  AWS_SECRET_ACCESS_KEY: secretKey
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -13,3 +18,12 @@ jobs:
           node-version: 12.x
       - run: npm ci
       - run: npm run test
+    services:
+      minio:
+        # official minio/minio image entrypoint needs argument server /data
+        image: bitnami/minio:2020-debian-10
+        env:
+          MINIO_ACCESS_KEY: accessKey
+          MINIO_SECRET_KEY: secretKey
+        ports:
+          - 9000:9000
