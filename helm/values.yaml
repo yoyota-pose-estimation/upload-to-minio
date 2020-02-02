@@ -71,4 +71,6 @@ args: []
 
 env: []
 
-envFrom: []
+envFrom:
+  - secretRef:
+      name: storage-credential

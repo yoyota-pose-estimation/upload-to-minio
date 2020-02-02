@@ -27,4 +27,4 @@ jobs:
           --set image.repository=${{ steps.image-repository.outputs.repository }}
           --set image.tag=${{ github.sha }}
           --history-max 2
-          express-starter ./helm
+          upload-to-minio ./helm
