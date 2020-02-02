@@ -9,7 +9,7 @@ const {
 
 module.exports = new Minio.Client({
   port: parseInt(S3_ENDPOINT.split(":").pop(), 10),
-  useSSL: Boolean(S3_USE_HTTPS),
+  useSSL: S3_USE_HTTPS === "1",
   endPoint: S3_ENDPOINT.split(":").shift(),
   accessKey: AWS_ACCESS_KEY_ID,
   secretKey: AWS_SECRET_ACCESS_KEY

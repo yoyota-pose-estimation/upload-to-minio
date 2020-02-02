@@ -3,11 +3,13 @@ const bodyParser = require("body-parser")
 const compression = require("compression")
 const helmet = require("helmet")
 const multer = require("multer")
+const morgan = require("morgan")
 
 const app = express()
 const multerUpload = multer({ storage: multer.memoryStorage() })
 const s3Client = require("./s3Client")
 
+app.use(morgan("tiny"))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(compression())
