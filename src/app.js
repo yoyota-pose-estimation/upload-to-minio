@@ -18,15 +18,19 @@ app.get("/healthz", (_, res) => {
 })
 
 app.post("/:bucket/:section", multerUpload.single("file"), async (req, res) => {
-  const { bucket, section } = req.params
-  const { buffer, size, originalname } = req.file
-  await s3Client.putObject(
-    bucket,
-    `${section}/${new Date().toLocaleDateString("ko-KR")}/${originalname}`,
-    buffer,
-    size
-  )
-  res.status(204).send()
+  try {
+    const { bucket, section } = req.params
+    const { buffer, size, originalname } = req.file
+    await s3Client.putObject(
+      bucket,
+      `${section}/${new Date().toLocaleDateString("ko-KR")}/${originalname}`,
+      buffer,
+      size
+    )
+    res.status(204).send()
+  } catch (e) {
+    res.status(500).send(e.toString())
+  }
 })
 
 module.exports = app
