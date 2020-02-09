@@ -17,14 +17,4 @@ jobs:
         with:
           node-version: 12.x
       - run: npm ci
-      - run: sleep 10 # see https://github.com/yoyota-pose-estimation/upload-to-minio/issues/4
       - run: npm run test
-    services:
-      minio:
-        # official minio/minio image entrypoint needs argument server /data
-        image: bitnami/minio:2020-debian-10
-        env:
-          MINIO_ACCESS_KEY: accessKey
-          MINIO_SECRET_KEY: secretKey
-        ports:
-          - 9000:9000

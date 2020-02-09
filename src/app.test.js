@@ -1,53 +1,46 @@
+const mockPutObject = jest.fn()
+jest.mock("minio", () => ({
+  Client: jest.fn(() => ({
+    putObject: mockPutObject
+  }))
+}))
+
 const request = require("supertest")
 const app = require("./app")
-const s3Client = require("./s3Client")
 
-const testBucketName = "test-bucket"
+describe("file upload", () => {
+  const testBucketName = "test-bucket"
+  const section = "section"
+  const filename = "test.txt"
+  const buffer = Buffer.from("test content")
 
-async function createTestBucket() {
-  const buckets = await s3Client.listBuckets()
-  const testBucket = buckets.find(({ name }) => name === testBucketName)
-  if (!testBucket) {
-    await s3Client.makeBucket(testBucketName)
-  }
-}
-
-describe("upload test", () => {
-  beforeAll(async () => {
-    await createTestBucket()
+  afterEach(() => {
+    mockPutObject.mockReset()
   })
 
-  test("test file upload", async () => {
-    const testTxtContent = "test content"
-
+  test("success", async () => {
     const res = await request(app)
-      .post(`/${testBucketName}/section`)
-      .attach("file", Buffer.from(testTxtContent), "test.txt")
+      .post(`/${testBucketName}/${section}`)
+      .attach("file", buffer, filename)
     expect(res.status).toBe(204)
-
-    const stream = await s3Client.getObject(
-      testBucketName,
-      `section/${new Date().toLocaleDateString("ko-KR")}/test.txt`
+    const [bucketName, objectName, stream] = mockPutObject.mock.calls[0]
+    expect(bucketName).toBe(testBucketName)
+    expect(objectName).toEqual(
+      expect.stringMatching(/\w+\/\d+\/\d+\/\d+\/\d+\/\w+.\w+/)
     )
-
-    return new Promise((resolve, reject) => {
-      const chunks = []
-      stream.on("data", chunk => chunks.push(chunk))
-      stream.on("error", reject)
-      stream.on("end", () => {
-        const content = Buffer.concat(chunks).toString("utf8")
-        expect(content).toBe(testTxtContent)
-        resolve()
-      })
-    })
+    expect(stream).toEqual(buffer)
   })
 
-  test("test error handling", async () => {
-    const res = await request(app).post(`/${testBucketName}/section`)
+  test("on error", async () => {
+    const errorMessage = "intended test error message"
+    mockPutObject.mockImplementation(() => {
+      throw new Error(errorMessage)
+    })
+    const res = await request(app)
+      .post(`/${testBucketName}/${section}`)
+      .attach("file", buffer, filename)
     expect(res.status).toBe(500)
-    expect(res.text).toBe(
-      "TypeError: Cannot destructure property `buffer` of 'undefined' or 'null'."
-    )
+    expect(res.text).toBe(`Error: ${errorMessage}`)
   })
 })
 
