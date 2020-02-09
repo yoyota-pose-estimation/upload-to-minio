@@ -26,7 +26,7 @@ describe("file upload", () => {
     const [bucketName, objectName, stream] = mockPutObject.mock.calls[0]
     expect(bucketName).toBe(testBucketName)
     expect(objectName).toEqual(
-      expect.stringMatching(/\w+\/\d+\/\d+\/\d+\/\d+\/\w+.\w+/)
+      expect.stringMatching(/\w+\/\d\d\d\d\/\d\d\/\d\d\/\d\d\/\d\d\/\w+.\w+/)
     )
     expect(stream).toEqual(buffer)
   })
