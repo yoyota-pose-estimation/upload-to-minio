@@ -25,7 +25,6 @@ app.get("/healthz", (_, res) => {
 
 app.post("/:bucket/:section", multerUpload.single("file"), async (req, res) => {
   try {
-    console.log(dayjs.utc().format("YYYY/MM/DD/HH/mm"))
     const { bucket, section } = req.params
     const { buffer, size, originalname } = req.file
     await s3Client.putObject(
