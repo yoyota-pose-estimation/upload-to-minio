@@ -4,6 +4,7 @@ const compression = require("compression")
 const helmet = require("helmet")
 const multer = require("multer")
 const morgan = require("morgan")
+const dayjs = require("dayjs")
 
 const app = express()
 const multerUpload = multer({ storage: multer.memoryStorage() })
@@ -25,12 +26,14 @@ app.post("/:bucket/:section", multerUpload.single("file"), async (req, res) => {
     const { buffer, size, originalname } = req.file
     await s3Client.putObject(
       bucket,
-      `${section}/${new Date().toLocaleDateString("ko-KR")}/${originalname}`,
+      `${section}/${dayjs().format("YYYY/MM/DD/mm")}/${originalname}`,
       buffer,
       size
     )
     res.status(204).send()
   } catch (e) {
+    // eslint-disable-next-line no-console
+    console.error(e)
     res.status(500).send(e.toString())
   }
 })
