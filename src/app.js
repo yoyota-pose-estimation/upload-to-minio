@@ -5,6 +5,9 @@ const helmet = require("helmet")
 const multer = require("multer")
 const morgan = require("morgan")
 const dayjs = require("dayjs")
+const utc = require("dayjs/plugin/utc")
+
+dayjs.extend(utc)
 
 const app = express()
 const multerUpload = multer({ storage: multer.memoryStorage() })
@@ -22,11 +25,12 @@ app.get("/healthz", (_, res) => {
 
 app.post("/:bucket/:section", multerUpload.single("file"), async (req, res) => {
   try {
+    console.log(dayjs.utc().format("YYYY/MM/DD/HH/mm"))
     const { bucket, section } = req.params
     const { buffer, size, originalname } = req.file
     await s3Client.putObject(
       bucket,
-      `${section}/${dayjs().format("YYYY/MM/DD/mm")}/${originalname}`,
+      `${section}/${dayjs.utc().format("YYYY/MM/DD/HH/mm")}/${originalname}`,
       buffer,
       size
     )
