@@ -25,9 +25,10 @@ describe("file upload", () => {
     expect(res.status).toBe(204)
     const [bucketName, objectName, stream] = mockPutObject.mock.calls[0]
     expect(bucketName).toBe(testBucketName)
-    expect(objectName).toEqual(
-      expect.stringMatching(/\w+\/\d\d\d\d-\d\d-\d\d\/\d\d\/\w+.\w+/)
+    const re = new RegExp(
+      `${section}/${"\\d{4}-\\d{2}-\\d{2}/\\d{2}"}/${filename}`
     )
+    expect(objectName).toEqual(expect.stringMatching(re))
     expect(stream).toEqual(buffer)
   })
 
