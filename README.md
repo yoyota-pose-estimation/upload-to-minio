@@ -1,3 +1,1 @@
-# upload-to-minio
-
-express starter repository
+micro service to upload file to minio
