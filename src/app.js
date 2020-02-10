@@ -29,7 +29,7 @@ app.post("/:bucket/:section", multerUpload.single("file"), async (req, res) => {
     const { buffer, size, originalname } = req.file
     await s3Client.putObject(
       bucket,
-      `${section}/${dayjs.utc().format("YYYY/MM/DD/HH/mm")}/${originalname}`,
+      `${section}/${dayjs.utc().format("YYYY-MM-DD/HH")}/${originalname}`,
       buffer,
       size
     )
